@@ -1,113 +1,119 @@
-import Image from "next/image";
+'use client';
+
+
+import NavBar from "@/components/nav-bar";
+import HomeSection from "@/components/sections/home";
+import AboutSection from "@/components/sections/about";
+import ToolSection from "@/components/sections/tool";
+import PortfolioSection from "@/components/sections/portfolio";
+import ContactSection from "@/components/sections/contact";
+import FooterSection from "@/components/sections/footer";
+//@ts-ignore
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
+import { TextPlugin } from "gsap/TextPlugin";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+import gsap from "gsap";
+import { useLayoutEffect } from "react";
+
 
 export default function Home() {
+  
+  useLayoutEffect(() => {
+    const links = gsap.utils.toArray('li')
+    
+    let effect = gsap.context(() => {
+      gsap.registerPlugin(ScrollTrigger,TextPlugin,ScrollToPlugin)
+      const nav_link = ['home', 'about', 'tool', 'portfolio', 'contact']
+      links.forEach((link,index) => {
+        
+        //@ts-ignore
+        
+        link.addEventListener('click', () => {
+          
+          gsap.to(window, {scrollTo: `#${nav_link[index]}`})
+        })
+      })
+      gsap.to('.home-nav', {scrollTo: '#home'})
+      let tl = gsap.timeline({defaults: {ease: 'back.out'}})
+      tl
+        .fromTo('.text1', {opacity: 0, y: 500},{opacity: 1, y: 0, duration: 1})
+        .fromTo('.text2', {opacity: 0, y: -100},{opacity: 1, y: 0, duration: .7})
+        .fromTo('.nav', {opacity: 0, y: -200},{opacity: 1, y: 0, duration: .7},'<')
+  
+  
+      const sections = gsap.utils.toArray('section') 
+      sections.forEach((section, index) => {
+        //@ts-ignore
+        let h4 = section.querySelector('h4')
+        //@ts-ignore
+        let h2 = section.querySelector('h2')
+        //@ts-ignore
+        let content = section.querySelector('.content')
+        let tl = gsap.timeline({defaults: {duration: .4}})
+          .fromTo(h4, {opacity: 0, y: -100}, {opacity: 1, y:0})
+          .fromTo(h2, {opacity: 0, y: -100}, {opacity: 1, y:0})
+          .fromTo(content, {opacity: 0, y: 100}, {opacity: 1, y:0})
+        ScrollTrigger.create({
+          //@ts-ignore
+          trigger: section,
+          start: 'top center',
+          end: 'bottom center',
+          // markers: true,
+          scrub: 1,
+          onToggle: (self) => {
+            if (self.isActive) {
+              gsap.to(`.nav-list li:nth-child(${index+1})`, {color: 'white',duration: 0.5})
+            }else {
+              gsap.to(`.nav-list li:nth-child(${index+1})`, {color: '#535353',duration: 0.5})
+            }
+            
+          }
+        })
+        
+        ScrollTrigger.create({
+          //@ts-ignore
+          trigger: section,
+          start: 'top 90%',
+          end: '+=200',
+          animation: tl
+        })
+      })
+      
+  
+      ScrollTrigger.create({
+        trigger: '.about',
+        start: '40% center',
+        end: '75% center',
+        scrub: 1,
+        // markers: true,
+        pin: '.me',
+        pinSpacing: false
+        // animation: t
+      })
+
+
+    })   
+
+    return () => effect.kill()
+
+   
+    
+  } )
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    //@ts-ignore
+    <div className="bg-black min-h-screen text-white relative box pb-4">
+      <NavBar />
+      <HomeSection />
+      <div className="flex flex-col gap-40">
+        <AboutSection />
+        <ToolSection />
+        <PortfolioSection />
+        <ContactSection />
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      
+    </div>
   );
 }
