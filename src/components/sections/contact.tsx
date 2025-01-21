@@ -64,7 +64,7 @@ export default function ContactSection() {
                     <div className='flex flex-col gap-1'>
                       <h3 className='text-3xl text-[#535353] '>location</h3>
                       <div className='flex flex-col gap-2'>
-                        <p>Minneapolis, Minnesota, US</p>
+                        <p>Bowling Green, Ohio, US</p>
                         
                       </div>
                     </div>
