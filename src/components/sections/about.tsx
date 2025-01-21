@@ -25,7 +25,7 @@ export default function AboutSection() {
                             <SewingPinIcon />
                             <h5>Minneapolis, Minnesota, US</h5>
                         </div>
-                        <a download href={'./Minh-Nguyen-CV.pdf'} className="border border-[#535353]/25 p-2 rounded-lg font-light mt-4 text-center hover:border-[#535353] duration-200">Download CV</a>
+                        <a download href={'./Resume.pdf'} className="border border-[#535353]/25 p-2 rounded-lg font-light mt-4 text-center hover:border-[#535353] duration-200">Download CV</a>
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
